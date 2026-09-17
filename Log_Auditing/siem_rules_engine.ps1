@@ -1,41 +1,41 @@
-Write-Host "=== INICIANDO MOTOR DE CORRELACI覰 SIEM HYBRID AUDIT ===" -ForegroundColor Cyan
-Write-Host "Cargando reglas de detecci髇 basadas en MITRE ATT&CK...`n" -ForegroundColor Gray
+Write-Host "=== INICIANDO MOTOR DE CORRELACI脫N SIEM HYBRID AUDIT ===" -ForegroundColor Cyan
+Write-Host "Cargando reglas de detecci贸n basadas en MITRE ATT&CK...`n" -ForegroundColor Gray
 
 $eventos = Get-Content -Raw -Path "Log_Auditing\compromised_siem_feed.json" | ConvertFrom-Json
 
 foreach ($e in $eventos) {
-    # Regla 1: Registro (Event 4688)
+    # R-1: Registro (Event 4688)
     if ($e.event_id -eq 4688 -and $e.payload.CommandLine -like "*reg add*") {
-        Write-Host "[CR蚑ICO] Alerta SIEM: Persistencia en Registro!" -ForegroundColor Red
-        Write-Host " -> T閏nica: MITRE T1547.001 - Run Key Modification"
+        Write-Host "[CR脥TICO] Alerta SIEM: Persistencia en Registro!" -ForegroundColor Red
+        Write-Host " -> T茅cnica: MITRE T1547.001 - Run Key Modification"
         Write-Host " -> Comando: $($e.payload.CommandLine)`n" -ForegroundColor DarkYellow
     }
     
-    # Regla 2: Evasi髇 Antivirus (Event 1)
+    # R-2: Evasi贸n Antivirus (Event 1)
     if (\(e.event_id -eq 1 -and\)e.payload.CommandLine -like "*DisableRealtimeMonitoring*") {
-        Write-Host "[CR蚑ICO] Alerta SIEM: Desactivaci髇 de Antivirus!" -ForegroundColor Red
-        Write-Host " -> T閏nica: MITRE T1562.001 - Impair Defenses"
+        Write-Host "[CR脥TICO] Alerta SIEM: Desactivaci贸n de Antivirus!" -ForegroundColor Red
+        Write-Host " -> T茅cnica: MITRE T1562.001 - Impair Defenses"
         Write-Host " -> Comando: (e.payload.CommandLine)`n" -ForegroundColor DarkYellow
     }
     
-    # Regla 3: Acceso a LSASS / Credenciales (Event 10)
+    # R-3: Acceso a LSASS / Credenciales (Event 10)
     if ($e.event_id -eq 10) {
-        Write-Host "[ALERTA M罼IMA] Alerta SIEM: Volcado de Memoria LSASS (Mimikatz)!" -ForegroundColor White -BackgroundColor DarkRed
-        Write-Host " -> T閏nica: MITRE T1003.001 - LSASS Dumping"
+        Write-Host "[ALERTA M脕XIMA] Alerta SIEM: Volcado de Memoria LSASS (Mimikatz)!" -ForegroundColor White -BackgroundColor DarkRed
+        Write-Host " -> T茅cnica: MITRE T1003.001 - LSASS Dumping"
         Write-Host " -> Origen: $($e.payload.SourceImage)`n" -ForegroundColor Yellow
     }
     
-    # Regla 4: Conexi髇 C2 (Event 3)
+    # R-4: Conexi贸n C2 (Event 3)
     if (\$e.event_id -eq 3) {
-        Write-Host "[ALTA] Alerta SIEM: Tr醘ico de Red C2 Confirmado!" -ForegroundColor Magenta
-        Write-Host " -> T閏nica: MITRE T1071 - Protocolo Externo"
+        Write-Host "[ALTA] Alerta SIEM: Tr谩fico de Red C2 Confirmado!" -ForegroundColor Magenta
+        Write-Host " -> T茅cnica: MITRE T1071 - Protocolo Externo"
         Write-Host " -> IP C2: (e.payload.DestinationIp) en Puerto (e.payload.DestinationPort)`n" -ForegroundColor DarkYellow
     }
     
-    # Regla 5: Tarea Programada (Event 4698)
+    # R-5: Tarea Programada (Event 4698)
     if ($e.event_id -eq 4698) {
-        Write-Host "[CR蚑ICO] Alerta SIEM: Tarea Programada Maliciosa!" -ForegroundColor Red
-        Write-Host " -> T閏nica: MITRE T1053.005 - Scheduled Task"
+        Write-Host "[CR脥TICO] Alerta SIEM: Tarea Programada Maliciosa!" -ForegroundColor Red
+        Write-Host " -> T茅cnica: MITRE T1053.005 - Scheduled Task"
         Write-Host " -> Nombre: $($e.payload.TaskName)`n" -ForegroundColor DarkYellow
     }
 }

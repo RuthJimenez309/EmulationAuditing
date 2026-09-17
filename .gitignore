@@ -1,0 +1,7 @@
+# Logs simulados y respaldos (no subir a GitHub)
+Log_Auditing/compromised_siem_feed.json
+Log_Auditing/compromised_siem_feed_backup.json
+
+# Archivos de configuración local o temporales de VS Code
+.vscode/
+*.log
